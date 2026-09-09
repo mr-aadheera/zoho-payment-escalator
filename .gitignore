@@ -1,0 +1,7 @@
+.env
+venv/
+__pycache__/
+*.pyc
+escalation_state.json
+.DS_Store
+Thumbs.db
