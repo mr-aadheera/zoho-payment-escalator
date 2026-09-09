@@ -103,10 +103,20 @@ First run may take a few minutes if you have many overdue invoices, since each u
 
 ## Automating it (Windows Task Scheduler)
 
+A ready-made script, `run_zoho_escalator.bat`, is included — it activates the virtual environment, runs `escalator.py` once, and logs all output to `escalator_log.txt` in the project folder (so you can check what happened later without watching it live).
+
+Before using it, open `run_zoho_escalator.bat` and update the `PROJECT_DIR` line to match wherever your working copy actually lives (the folder containing your real `.env` and `venv`, not just a copy meant for GitHub).
+
 1. Open **Task Scheduler** → **Create Task**.
-2. **Triggers tab**: New → **Daily**, pick a time.
-3. **Actions tab**: New → **Start a program** → point to your Python executable, with the script path as an argument, and the project folder as "Start in."
-4. Save.
+2. **General tab**: name it (e.g. "Zoho Payment Escalator"), leave **"Run only when user is logged on"** selected — this avoids needing to enter your Windows password.
+3. **Triggers tab**: New → **Daily**, pick a time (e.g. 10:00 AM) → OK.
+4. **Actions tab**: New → **Start a program** → Browse to `run_zoho_escalator.bat` → OK.
+5. **Conditions tab**: uncheck "Start the task only if the computer is on AC power" if this runs on a laptop.
+6. Save.
+
+This is a **daily, one-shot job** — it runs once, does its work, and exits. It should not be set to run continuously or trigger "At log on," since re-running it every time you log in could mean multiple runs per day. A single daily trigger is enough; the escalation state file already prevents duplicate messages even if you also run it manually in between scheduled runs.
+
+Test it manually first by double-clicking `run_zoho_escalator.bat` and checking `escalator_log.txt` for the expected output before relying on the scheduled trigger.
 
 ---
 
